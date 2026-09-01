@@ -1,0 +1,13 @@
+services:
+  e-any-portal:
+    image: nginx:alpine
+    container_name: e-any-portal
+    restart: unless-stopped
+    volumes:
+      - ./index.html:/usr/share/nginx/html/index.html:ro
+    networks:
+      - proxy-network
+
+networks:
+  proxy-network:
+    external: true

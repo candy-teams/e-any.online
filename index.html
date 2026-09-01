@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>e-any.online</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0a0f;
+            color: #e4e4e7;
+            min-height: 100vh;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 60px 20px 20px;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6, #a78bfa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 8px;
+        }
+
+        .hero p {
+            color: #71717a;
+            font-size: 1rem;
+        }
+
+        .section-title {
+            text-align: center;
+            padding: 30px 20px 16px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #52525b;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 16px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px 40px;
+        }
+
+        .card {
+            background: #18181b;
+            border: 1px solid #27272a;
+            border-radius: 12px;
+            padding: 24px;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            cursor: pointer;
+        }
+
+        .card:hover {
+            background: #1f1f23;
+            border-color: #3f3f46;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+        }
+
+        .card-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .card-body h3 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #fafafa;
+            margin-bottom: 4px;
+        }
+
+        .card-body p {
+            font-size: 0.8rem;
+            color: #71717a;
+            line-height: 1.4;
+        }
+
+        .card-url {
+            font-size: 0.7rem;
+            color: #52525b;
+            margin-top: 6px;
+            font-family: monospace;
+        }
+
+        .bg-blue    { background: #1e3a5f; }
+        .bg-purple  { background: #3b1f5e; }
+        .bg-green   { background: #1a3a2a; }
+        .bg-orange  { background: #3d2b10; }
+        .bg-red     { background: #3d1515; }
+        .bg-teal    { background: #0f2d2d; }
+        .bg-pink    { background: #3d1a2e; }
+        .bg-indigo  { background: #1e1f5e; }
+        .bg-cyan    { background: #0f2a3d; }
+        .bg-yellow  { background: #3d3a10; }
+        .bg-emerald { background: #0f3d2a; }
+        .bg-rose    { background: #3d1020; }
+        .bg-amber   { background: #3d2e0f; }
+        .bg-slate   { background: #1e2028; }
+        .bg-violet  { background: #2d1b4e; }
+        .bg-lime    { background: #1a3d10; }
+        .bg-fuchsia { background: #3d0f35; }
+
+        /* ---------- Admin login ---------- */
+        #login-overlay {
+            position: fixed;
+            inset: 0;
+            background: #0a0a0f;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        #login-overlay.hidden { display: none; }
+
+        .login-box {
+            width: min(360px, 90vw);
+            background: #18181b;
+            border: 1px solid #27272a;
+            border-radius: 12px;
+            padding: 32px;
+            text-align: center;
+        }
+
+        .login-box h2 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 6px;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6, #a78bfa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .login-box p {
+            font-size: 0.8rem;
+            color: #71717a;
+            margin-bottom: 20px;
+        }
+
+        .login-box input {
+            width: 100%;
+            padding: 12px 14px;
+            background: #0a0a0f;
+            border: 1px solid #3f3f46;
+            border-radius: 8px;
+            color: #e4e4e7;
+            font-size: 0.9rem;
+            font-family: 'Inter', sans-serif;
+            outline: none;
+            margin-bottom: 12px;
+        }
+
+        .login-box input:focus { border-color: #6366f1; }
+
+        .login-box button {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            border: none;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .login-box button:hover { opacity: 0.9; }
+
+        .login-error {
+            color: #f87171;
+            font-size: 0.75rem;
+            margin-top: 10px;
+            min-height: 1em;
+        }
+
+        /* ---------- Admin bar & SSH card ---------- */
+        #admin-bar {
+            display: none;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 24px auto -6px;
+            padding: 10px 24px;
+            background: #18181b;
+            border: 1px solid #27272a;
+            border-radius: 10px;
+            font-size: 0.8rem;
+            color: #a1a1aa;
+        }
+
+        body.admin #admin-bar { display: flex; }
+
+        #admin-bar .badge {
+            background: #1e3a5f;
+            color: #93c5fd;
+            border-radius: 6px;
+            padding: 3px 10px;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+
+        #admin-bar button {
+            background: none;
+            border: 1px solid #3f3f46;
+            border-radius: 6px;
+            color: #a1a1aa;
+            padding: 5px 12px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+        }
+
+        #admin-bar button:hover { border-color: #f87171; color: #f87171; }
+
+        #ssh-card {
+            display: none;
+            background: #18181b;
+            border: 1px solid #27272a;
+            border-radius: 12px;
+            padding: 24px;
+            max-width: 1200px;
+            margin: 0 auto 40px;
+        }
+
+        body.admin #ssh-card { display: block; }
+
+        #ssh-card h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #fafafa;
+            margin-bottom: 6px;
+        }
+
+        #ssh-card .desc {
+            font-size: 0.8rem;
+            color: #71717a;
+            line-height: 1.5;
+            margin-bottom: 16px;
+        }
+
+        .cmd-box {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #0a0a0f;
+            border: 1px solid #3f3f46;
+            border-radius: 8px;
+            padding: 12px 14px;
+            margin-bottom: 12px;
+        }
+
+        .cmd-box code {
+            flex: 1;
+            font-family: monospace;
+            font-size: 0.78rem;
+            color: #a5b4fc;
+            word-break: break-all;
+        }
+
+        .cmd-box button {
+            background: #27272a;
+            border: 1px solid #3f3f46;
+            border-radius: 6px;
+            color: #d4d4d8;
+            padding: 6px 12px;
+            font-size: 0.72rem;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .cmd-box button:hover { border-color: #6366f1; color: #a5b4fc; }
+
+        #ssh-card ol {
+            margin: 12px 0 0 20px;
+            font-size: 0.8rem;
+            color: #a1a1aa;
+            line-height: 1.8;
+        }
+
+        #ssh-card a { color: #a5b4fc; }
+
+        @media (max-width: 640px) {
+            .hero h1 { font-size: 1.8rem; }
+            .grid { grid-template-columns: 1fr; padding: 0 16px 40px; }
+            #admin-bar { margin: 16px 16px -6px; }
+            #ssh-card { margin: 0 16px 40px; }
+        }
+    </style>
+</head>
+<body>
+    <div id="login-overlay">
+        <div class="login-box">
+            <h2>e-any.online</h2>
+            <p>Hizmetler &amp; Araçlar — yönetici girişi</p>
+            <input type="password" id="admin-pass" placeholder="Yönetici şifresi" autocomplete="current-password" autofocus>
+            <button onclick="tryLogin()">Giriş Yap</button>
+            <div class="login-error" id="login-error"></div>
+        </div>
+    </div>
+
+    <div class="hero">
+        <h1>e-any.online</h1>
+        <p>Hizmetler & Araçlar</p>
+    </div>
+
+    <div id="admin-bar">
+        <span><span class="badge">ADMIN</span></span>
+        <button onclick="logout()">Çıkış</button>
+    </div>
+
+    <div class="section-title">AI & Agent Platformlari</div>
+    <div class="grid">
+        <a class="card" href="https://agentsmesh.e-any.online" target="_blank">
+            <div class="card-icon bg-indigo">AM</div>
+            <div class="card-body">
+                <h3>AgentsMesh</h3>
+                <p>AI Agent Workforce Platform — coklu ajan yonetimi</p>
+                <div class="card-url">agentsmesh.e-any.online</div>
+            </div>
+        </a>
+        <a class="card" href="https://a0.e-any.online" target="_blank">
+            <div class="card-icon bg-purple">A0</div>
+            <div class="card-body">
+                <h3>Agent Zero</h3>
+                <p>Otonom AI ajan platformu</p>
+                <div class="card-url">a0.e-any.online</div>
+            </div>
+        </a>
+        <a class="card" href="https://ai.e-any.online" target="_blank">
+            <div class="card-icon bg-blue">AI</div>
+            <div class="card-body">
+                <h3>AI WebUI</h3>
+                <p>AI arayuz paneli</p>
+                <div class="card-url">ai.e-any.online</div>
+            </div>
+        </a>
+
+        <a class="card" href="https://deepseek.agentandbot.com" target="_blank">
+            <div class="card-icon bg-cyan">DS</div>
+            <div class="card-body">
+                <h3>DeepSeek</h3>
+                <p>DeepSeek arayuzu</p>
+                <div class="card-url">deepseek.agentandbot.com</div>
+            </div>
+        </a>
+        <a class="card" href="https://n8n.e-any.online" target="_blank">
+            <div class="card-icon bg-orange">n8n</div>
+            <div class="card-body">
+                <h3>n8n</h3>
+                <p>Workflow otomasyon platformu</p>
+                <div class="card-url">n8n.e-any.online</div>
+            </div>
+        </a>
+        <a class="card" href="https://windmill.e-any.online" target="_blank">
+            <div class="card-icon bg-amber">W</div>
+            <div class="card-body">
+                <h3>Windmill</h3>
+                <p>Script & workflow otomasyon araci</p>
+                <div class="card-url">windmill.e-any.online</div>
+            </div>
+        </a>
+    </div>
+
+    <div id="ssh-card">
+        <h3>DeepSeek — Alternatif Erisim (SSH Tüneli)</h3>
+        <div class="desc">
+            Models / Ayarlar sayfalari tasarim geregi yalnizca <code>localhost</code> adreslerinden acilir.
+            Domain uzerinden sohbet calisir; tam islevsellik icin asagidaki SSH tüneli ile acin.
+        </div>
+        <div class="cmd-box">
+            <code id="ssh-cmd">ssh -N -L 5174:172.18.0.1:5174 ubuntu@37.187.132.73</code>
+            <button onclick="copyCmd()">Kopyala</button>
+        </div>
+        <ol>
+            <li>Yukaridaki komutu kendi bilgisayarinizda terminalde calistirin.</li>
+            <li>Tarayicida <a href="http://localhost:5174" target="_blank">http://localhost:5174</a> adresini acin.</li>
+            <li>Settings &rarr; Models dahil tum ozellikler calisir (API anahtari sunucuda zaten tanimli).</li>
+        </ol>
+    </div>
+
+    <div class="section-title">Uygulamalar</div>
+    <div class="grid">
+        <a class="card" href="https://agentandbot.com" target="_blank">
+            <div class="card-icon bg-violet">AB</div>
+            <div class="card-body">
+                <h3>AgentAndBot</h3>
+                <p>Agent and Bot ana platform</p>
+                <div class="card-url">agentandbot.com</div>
+            </div>
+        </a>
+        <a class="card" href="https://cv.agentandbot.com" target="_blank">
+            <div class="card-icon bg-green">CV</div>
+            <div class="card-body">
+                <h3>CV Generator</h3>
+                <p>AI destekli CV olusturucu</p>
+                <div class="card-url">cv.agentandbot.com</div>
+            </div>
+        </a>
+        <a class="card" href="https://kadro.agentandbot.com" target="_blank">
+            <div class="card-icon bg-emerald">K</div>
+            <div class="card-body">
+                <h3>Kadro Platform</h3>
+                <p>Kadro yonetim platformu</p>
+                <div class="card-url">kadro.agentandbot.com</div>
+            </div>
+        </a>
+        <a class="card" href="https://orca.e-any.online" target="_blank">
+            <div class="card-icon bg-rose">O</div>
+            <div class="card-body">
+                <h3>Orca IDE</h3>
+                <p>Web tabanli gelistirme ortami</p>
+                <div class="card-url">orca.e-any.online</div>
+            </div>
+        </a>
+        <a class="card" href="https://9router.e-any.online" target="_blank">
+            <div class="card-icon bg-slate">9R</div>
+            <div class="card-body">
+                <h3>9Router</h3>
+                <p>Router yonetim araci</p>
+                <div class="card-url">9router.e-any.online</div>
+            </div>
+        </a>
+        <a class="card" href="https://desktop.e-any.online" target="_blank">
+            <div class="card-icon bg-fuchsia">D</div>
+            <div class="card-body">
+                <h3>Desktop</h3>
+                <p>Uzak masaustu erisimi</p>
+                <div class="card-url">desktop.e-any.online</div>
+            </div>
+        </a>
+    </div>
+
+    <div class="section-title">Yonetim & Izleme</div>
+    <div class="grid">
+        <a class="card" href="https://portainer.e-any.online" target="_blank">
+            <div class="card-icon bg-blue">P</div>
+            <div class="card-body">
+                <h3>Portainer</h3>
+                <p>Docker konteyner yonetimi</p>
+                <div class="card-url">portainer.e-any.online</div>
+            </div>
+        </a>
+        <a class="card" href="https://status.e-any.online" target="_blank">
+            <div class="card-icon bg-green">S</div>
+            <div class="card-body">
+                <h3>Uptime Kuma</h3>
+                <p>Hizmet uptime izleme</p>
+                <div class="card-url">status.e-any.online</div>
+            </div>
+        </a>
+        <a class="card" href="https://netdata.e-any.online" target="_blank">
+            <div class="card-icon bg-lime">N</div>
+            <div class="card-body">
+                <h3>Netdata</h3>
+                <p>Sistem performans izleme</p>
+                <div class="card-url">netdata.e-any.online</div>
+            </div>
+        </a>
+        <a class="card" href="https://logs.e-any.online" target="_blank">
+            <div class="card-icon bg-yellow">L</div>
+            <div class="card-body">
+                <h3>Dozzle</h3>
+                <p>Docker log goruntuleyici</p>
+                <div class="card-url">logs.e-any.online</div>
+            </div>
+        </a>
+        <a class="card" href="http://localhost:81" target="_blank">
+            <div class="card-icon bg-teal">NPM</div>
+            <div class="card-body">
+                <h3>Nginx Proxy Manager</h3>
+                <p>Sadece SSH tuneli ile: ssh -N -L 81:172.18.0.1:81 ubuntu@37.187.132.73 sonra localhost:81</p>
+                <div class="card-url">localhost:81 (SSH tuneli gerekli)</div>
+            </div>
+        </a>
+    </div>
+
+    <div style="text-align:center; padding: 20px; color: #3f3f46; font-size: 0.75rem;">
+        e-any.online &copy; 2026
+    </div>
+
+    <script>
+        // SHA-256 hash of the admin password. Change both to rotate.
+        const ADMIN_HASH = '7fc42249ab45bc3749f7c5b51aef2d71fdb82b19002050424203fefb275683ad';
+
+        async function sha256(text) {
+            const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
+            return [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, '0')).join('');
+        }
+
+        async function tryLogin() {
+            const input = document.getElementById('admin-pass');
+            const err = document.getElementById('login-error');
+            const hash = await sha256(input.value);
+            if (hash === ADMIN_HASH) {
+                sessionStorage.setItem('eany-admin', '1');
+                grantAccess();
+            } else {
+                err.textContent = 'Hatali sifre, tekrar deneyin.';
+                input.value = '';
+                input.focus();
+            }
+        }
+
+        function grantAccess() {
+            document.getElementById('login-overlay').classList.add('hidden');
+            document.body.classList.add('admin');
+        }
+
+        function logout() {
+            sessionStorage.removeItem('eany-admin');
+            location.reload();
+        }
+
+        function copyCmd() {
+            navigator.clipboard.writeText(document.getElementById('ssh-cmd').textContent);
+        }
+
+        document.getElementById('admin-pass').addEventListener('keydown', e => {
+            if (e.key === 'Enter') tryLogin();
+        });
+
+        if (sessionStorage.getItem('eany-admin') === '1') grantAccess();
+    </script>
+</body>
+</html>
