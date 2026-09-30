@@ -3,8 +3,11 @@ services:
     image: nginx:alpine
     container_name: e-any-portal
     restart: unless-stopped
+    environment:
+      - ADMIN_HASH=${ADMIN_HASH:-__ADMIN_HASH__}
     volumes:
-      - ./index.html:/usr/share/nginx/html/index.html:ro
+      - ./index.html:/usr/share/nginx/html/index.html
+      - ./docker-entrypoint.sh:/docker-entrypoint.d/20-envsubst.sh:ro
     networks:
       - proxy-network
 
