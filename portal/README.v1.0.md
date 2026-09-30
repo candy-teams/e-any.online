@@ -1,6 +1,6 @@
 # Portal deployment
 
-The root Compose entry point delegates to the protected portal deployment in this folder. The upstream deployment history is merged; the duplicate root HTML, client-side password verifier, source-rewriting entrypoint and tracked `.env` are removed from the current tree. Provision credentials outside the repository.
+The root deployment entry point and startup validation adapt the useful deployment changes reviewed at upstream commit `c5e127021a6ffb2f4a0ae6684f9ceca90a3f0a93`. This is a selective adaptation, not a merge of upstream history. The duplicate root HTML, embedded password verifier and committed `.env` were not imported.
 
 ## Requirements
 
