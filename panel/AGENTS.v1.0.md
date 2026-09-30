@@ -1,34 +1,9 @@
-# e-any panel
-
-## Purpose
-- Phoenix/LiveView workspace for bookmarks, encrypted Markdown notes and credentials, private feed, and internal tool discovery.
-
-## Ownership
-- Own panel source, web UI, migrations, assets, tests and runtime configuration.
-- Domain-specific contracts live in `lib/e_any_panel/AGENTS.md`; web, migrations, assets and tests remain owned here.
-
-## Local Contracts
-- Read and apply repository DOX, product boundaries and preferences before edits.
-- First delivery is a shared authenticated workspace; no public SaaS tenancy or agent API is implemented.
-- Server-side event and navigation checks must enforce permissions independently of visible menus. Recheck users when permissions/passwords change.
-- Viewers cannot mutate records; managers can edit allowed sections; role management is admin-only.
-- All credential/note content requires an unlocked vault. Lists/search use metadata; explicit read/edit/copy/export is audited. Unlock is rate limited and expires after five minutes.
-- Form changes validate only. Explicit submit persists. Specific edit handlers precede generic new handlers.
-- New primary lists use LiveView streams. Feed pages contain 30 entries and retain at most 90 rendered entries while loading older pages.
-- Private feed must stay authenticated and separate from the public static feed. Publisher labels do not imply delivery.
-- Markdown import opens an unsaved draft; export is explicit unencrypted UTF-8 .md. Current editor shows Markdown source, not a Notion block editor.
-- Tool templates require actual user-provided URLs; registering Activepieces/Windmill does not deploy them.
-- `priv/repo/seeds/infrastructure_tools.exs` lists browser-facing services from the root INFRASTRUCTURE.md. `seeds.exs` inserts only missing URLs and never overwrites edited tools or vault links. Keep both files in sync; no credentials in seed data.
-
-## Work Guidance
-- Apply the repository Bauhaus contract to public entry, authentication and workspace screens. Use shared theme tokens, functional row layouts, visible keyboard focus and touch targets of at least 44px for primary controls.
-- Use text branding for e-any; do not display Phoenix starter logos, framework links or version labels in product navigation.
-
+This is a web application written using the Phoenix web framework.
 
 ## Project guidelines
 
 - Use `mix precommit` alias when you are done with all changes and fix any pending issues
-- Reuse the existing Finch dependency for current HTTP integrations. Do not add a second HTTP client without a concrete requirement.
+- Use the already included and available `:req` (`Req`) library for HTTP requests, **avoid** `:httpoison`, `:tesla`, and `:httpc`. Req is included by default and is the preferred HTTP client for Phoenix apps
 ### Phoenix v1.8 guidelines
 
 - **Always** begin your LiveView templates with `<Layouts.app flash={@flash} ...>` which wraps all inner content
@@ -324,16 +299,3 @@ And **never** do this:
 - **Never** use `<.form let={f} ...>` in the template, instead **always use `<.form for={@form} ...>`**, then drive all form references from the form assign as in `@form[:field]`. The UI should **always** be driven by a `to_form/2` assigned in the LiveView module that is derived from a changeset
 <!-- phoenix:liveview-end -->
 <!-- usage-rules-end -->
-
-## Verification
-- `mix precommit` runs compilation with warnings treated as errors, unused dependency checks, formatting and tests.
-- New domain checks: `mix test test/e_any_panel/workspace_test.exs`.
-- New interaction checks: `mix test test/e_any_panel_web/workspace_live_test.exs`.
-- Infrastructure catalog: `mix test test/e_any_panel/infrastructure_catalog_test.exs`.
-- Supply a disposable PostgreSQL database via DB_HOSTNAME, DB_PORT, DB_PASSWORD and a base64 32-byte CLOAK_KEY for local testing. Never use production keys/data.
-- If Elixir/Mix or PostgreSQL is unavailable, report unexecuted tests explicitly; syntax checks are not a substitute.
-
-## Child DOX Index
-- [lib/e_any_panel/AGENTS.md](lib/e_any_panel/AGENTS.md): domain ownership, storage boundaries and extraction contracts.
-
-- Versioned `*.v1.*.md` files are historical snapshots, not active DOX contracts. Preserve them when revising canonical documents.

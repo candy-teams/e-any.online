@@ -25,7 +25,7 @@ defmodule EAnyPanelWeb.SessionLive do
     ~H"""
     <Layouts.app flash={@flash}>
       <div class="mx-auto max-w-md">
-        <h1 class="text-2xl font-semibold mb-6">Sign in to e-any panel</h1>
+        <h1 class="text-2xl font-semibold mb-6">Giriş yap</h1>
 
         <%= if @setup_needed? do %>
           <div class="alert alert-warning mb-4">
@@ -35,10 +35,10 @@ defmodule EAnyPanelWeb.SessionLive do
         <% end %>
 
         <.form for={@form} id="login-form" phx-submit="login">
-          <.input field={@form[:email]} type="email" label="Email" required />
-          <.input field={@form[:password]} type="password" label="Password" required />
+          <.input field={@form[:email]} type="email" label="E-posta" autocomplete="username" required />
+          <.input field={@form[:password]} type="password" label="Şifre" autocomplete="current-password" required />
           <div class="mt-4">
-            <button type="submit" class="btn btn-primary">Login</button>
+            <button type="submit" class="btn btn-primary">Giriş yap</button>
           </div>
         </.form>
 
@@ -56,14 +56,14 @@ defmodule EAnyPanelWeb.SessionLive do
     ~H"""
     <Layouts.app flash={@flash}>
       <div class="mx-auto max-w-md">
-        <h1 class="text-2xl font-semibold mb-6">Two-factor verification</h1>
-        <p>Enter the TOTP code from your authenticator app.</p>
+        <h1 class="text-2xl font-semibold mb-6">İki adımlı doğrulama</h1>
+        <p>Doğrulama uygulamandaki kodu gir.</p>
 
         <.form for={form} id="totp-form" phx-submit="verify_totp">
-          <.input field={form[:code]} type="text" label="TOTP Code" required />
+          <.input field={form[:code]} type="text" label="Doğrulama kodu" autocomplete="one-time-code" inputmode="numeric" required />
           <.input type="hidden" name="token" value={@token} />
           <div class="mt-4">
-            <button type="submit" class="btn btn-primary">Verify</button>
+            <button type="submit" class="btn btn-primary">Doğrula</button>
           </div>
         </.form>
 

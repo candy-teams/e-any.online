@@ -1,0 +1,3 @@
+# Compose 2.20.3+. The portal owns its deployment; this is the root entry point.
+include:
+  - path: ./portal/docker-compose.yml

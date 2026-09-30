@@ -18,7 +18,6 @@
 - Private feed must stay authenticated and separate from the public static feed. Publisher labels do not imply delivery.
 - Markdown import opens an unsaved draft; export is explicit unencrypted UTF-8 .md. Current editor shows Markdown source, not a Notion block editor.
 - Tool templates require actual user-provided URLs; registering Activepieces/Windmill does not deploy them.
-- `priv/repo/seeds/infrastructure_tools.exs` lists browser-facing services from the root INFRASTRUCTURE.md. `seeds.exs` inserts only missing URLs and never overwrites edited tools or vault links. Keep both files in sync; no credentials in seed data.
 
 ## Work Guidance
 - Apply the repository Bauhaus contract to public entry, authentication and workspace screens. Use shared theme tokens, functional row layouts, visible keyboard focus and touch targets of at least 44px for primary controls.
@@ -329,7 +328,6 @@ And **never** do this:
 - `mix precommit` runs compilation with warnings treated as errors, unused dependency checks, formatting and tests.
 - New domain checks: `mix test test/e_any_panel/workspace_test.exs`.
 - New interaction checks: `mix test test/e_any_panel_web/workspace_live_test.exs`.
-- Infrastructure catalog: `mix test test/e_any_panel/infrastructure_catalog_test.exs`.
 - Supply a disposable PostgreSQL database via DB_HOSTNAME, DB_PORT, DB_PASSWORD and a base64 32-byte CLOAK_KEY for local testing. Never use production keys/data.
 - If Elixir/Mix or PostgreSQL is unavailable, report unexecuted tests explicitly; syntax checks are not a substitute.
 

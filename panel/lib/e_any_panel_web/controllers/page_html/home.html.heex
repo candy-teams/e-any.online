@@ -1,35 +1,7 @@
 <Layouts.app flash={@flash}>
-  <div class="min-h-screen bg-gradient-to-br from-base-100 to-base-200">
-    <div class="navbar bg-base-100/80 backdrop-blur border-b border-base-300 px-4 sm:px-6 lg:px-8">
-      <div class="flex-1 flex items-center gap-2">
-        <img src={~p"/images/logo.svg"} width="36" alt="e-any logo" />
-        <span class="text-lg font-bold">e-any.online</span>
-      </div>
-      <div class="flex-none flex items-center gap-3">
-        <a href={~p"/login"} class="btn btn-primary btn-sm">Giriş Yap</a>
-        <Layouts.theme_toggle />
-      </div>
-    </div>
-
-    <main class="hero min-h-[calc(100vh-4rem)]">
-      <div class="hero-content text-center max-w-xl">
-        <div class="flex flex-col items-center">
-          <img src={~p"/images/logo.svg"} width="72" alt="e-any logo" class="mb-6" />
-          <h1 class="text-4xl sm:text-5xl font-bold tracking-tight">
-            e-any.online
-          </h1>
-          <p class="py-6 text-base-content/70 leading-relaxed max-w-lg">
-            Yönetim paneline giriş.
-          </p>
-          <div class="flex flex-wrap gap-3 justify-center">
-            <a href={~p"/login"} class="btn btn-primary btn-wide">Panele Giriş Yap</a>
-          </div>
-        </div>
-      </div>
-    </main>
-
-    <footer class="footer footer-center p-4 text-base-content/50 text-sm border-t border-base-300">
-      <p>© {NaiveDateTime.utc_now().year} e-any.online — Tüm hakları saklıdır.</p>
-    </footer>
-  </div>
+  <section aria-labelledby="entry-title">
+    <h1 id="entry-title" class="text-3xl font-semibold tracking-tight">Çalışma alanını aç</h1>
+    <p class="mt-4 mb-8 leading-relaxed">Notlarına, kayıtlı bağlantılarına, kasana ve araçlarına eriş.</p>
+    <a id="enter-workspace" href={~p"/login"} class="btn btn-primary">Panele Giriş Yap <.icon name="hero-arrow-right" class="size-4" /></a>
+  </section>
 </Layouts.app>

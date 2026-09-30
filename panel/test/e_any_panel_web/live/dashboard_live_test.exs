@@ -11,7 +11,7 @@ defmodule EAnyPanelWeb.DashboardLiveTest do
 
     {:ok, _view, html} = live(conn, ~p"/admin?tab=proxy_hosts")
 
-    assert html =~ "Dashboard"
+    assert html =~ "Başlangıç"
     assert html =~ "Proxy Hosts"
     assert html =~ "Access Lists"
     assert html =~ "Certificates"

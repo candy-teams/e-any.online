@@ -1,0 +1,7 @@
+# Credentials are provisioned outside the repository.
+.env
+.env.*
+!.env.example
+*.htpasswd
+secrets/
+__pycache__/

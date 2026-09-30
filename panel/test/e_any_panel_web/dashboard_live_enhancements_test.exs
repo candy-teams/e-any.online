@@ -33,6 +33,8 @@ defmodule EAnyPanelWeb.DashboardLiveEnhancementsTest do
     render_patch(view, "/admin?tab=secrets")
     assert render(view) =~ "Yeni Secret"
 
+    view |> form("#vault-unlock-form", %{password: "TestSifre123!"}) |> render_submit()
+
     # UI üzerinden kritik bir secret ekleyelim (cast + şifreleme gerçek akıştan)
     view
     |> element("button", "+ Yeni Secret")
@@ -41,8 +43,10 @@ defmodule EAnyPanelWeb.DashboardLiveEnhancementsTest do
     view
     |> form("form[phx-submit=\"save_secret\"]")
     |> render_submit(%{
-      secret: %{title: "Deneme Secret", password: "gizli-pass", is_critical: true}
+      secret: %{title: "Deneme Secret", password: "gizli-pass"}
     })
+
+    render_click(view, "lock_vault")
 
     # Secrets sekmesinde vault kilit banner'ı görünür, şifre sızmıyor
     assert render(view) =~ "Vault kilitli"
@@ -52,6 +56,7 @@ defmodule EAnyPanelWeb.DashboardLiveEnhancementsTest do
   test "admin can save a note through the live view", %{conn: conn} do
     {conn, _user} = create_admin(conn)
     {:ok, view, _html} = live(conn, "/admin?tab=notes")
+    view |> form("#vault-unlock-form", %{password: "TestSifre123!"}) |> render_submit()
 
     view
     |> element("button", "+ Yeni Not")
@@ -60,7 +65,7 @@ defmodule EAnyPanelWeb.DashboardLiveEnhancementsTest do
     view
     |> form("form[phx-submit=\"save_note\"]")
     |> render_submit(%{
-      note: %{title: "Test notu", body: "İçerik", is_critical: false}
+      note: %{title: "Test notu", body: "İçerik"}
     })
 
     assert render(view) =~ "Test notu"

@@ -1,12 +1,12 @@
 defmodule EAnyPanel.Panel do
   @moduledoc """
   Panel data: tools (link registry), bookmarks, notes, secrets and access logs.
-  Sensitive fields are encrypted via Cloak; this context only loads/decrypts
-  them, the UI enforces the re-auth gate before rendering.
+  Sensitive fields are encrypted via Cloak. Metadata queries exclude secret
+  contents; authenticated LiveView event gates enforce access before reading them.
   """
   import Ecto.Query, warn: false
   alias EAnyPanel.Repo
-  alias EAnyPanel.Panel.{Tool, Bookmark, Note, Secret, AccessLog}
+  alias EAnyPanel.Panel.{Tool, Bookmark, Secret, AccessLog}
 
   # --- Tools ---------------------------------------------------------------
   def list_tools(active_only \\ false)
@@ -25,15 +25,19 @@ defmodule EAnyPanel.Panel do
   def update_bookmark(%Bookmark{} = b, attrs), do: b |> Bookmark.changeset(attrs) |> Repo.update()
   def delete_bookmark(%Bookmark{} = b), do: Repo.delete(b)
 
-  # --- Notes ---------------------------------------------------------------
-  def list_notes, do: Repo.all(from n in Note, order_by: n.title)
-  def get_note(id), do: Repo.get(Note, id)
-  def create_note(attrs), do: %Note{} |> Note.changeset(attrs) |> Repo.insert()
-  def update_note(%Note{} = n, attrs), do: n |> Note.changeset(attrs) |> Repo.update()
-  def delete_note(%Note{} = n), do: Repo.delete(n)
+  # Compatibility entrypoints; Notebook owns note storage.
+  defdelegate list_notes(), to: EAnyPanel.Notebook, as: :list
+  defdelegate list_note_summaries(), to: EAnyPanel.Notebook, as: :summaries
+  defdelegate get_note(id), to: EAnyPanel.Notebook, as: :get
+  defdelegate create_note(attrs), to: EAnyPanel.Notebook, as: :create
+  defdelegate update_note(note, attrs), to: EAnyPanel.Notebook, as: :update
+  defdelegate delete_note(note), to: EAnyPanel.Notebook, as: :delete
 
   # --- Secrets -------------------------------------------------------------
   def list_secrets, do: Repo.all(from s in Secret, order_by: s.title)
+  def list_secret_summaries do
+    Repo.all(from s in Secret, order_by: s.title, select: struct(s, [:id, :title, :url, :is_critical]))
+  end
   def get_secret(id), do: Repo.get(Secret, id)
   def create_secret(attrs), do: %Secret{} |> Secret.changeset(attrs) |> Repo.insert()
   def update_secret(%Secret{} = s, attrs), do: s |> Secret.changeset(attrs) |> Repo.update()
@@ -76,55 +80,30 @@ defmodule EAnyPanel.Panel do
     end)
   end
 
-  # --- Search (titles / urls / categories only; bodies are encrypted) ------
-  def search(""), do: %{tools: [], bookmarks: [], notes: [], secrets: []}
-  def search(nil), do: %{tools: [], bookmarks: [], notes: [], secrets: []}
+  # Search only permitted metadata; encrypted fields are never searched.
+  def search(term, tabs \\ [:tools, :bookmarks, :notes, :secrets]) do
+    term = String.trim(term || "")
+    empty = %{tools: [], bookmarks: [], notes: [], secrets: []}
 
-  def search(term) do
-    like = "%#{String.trim(term)}%"
+    if term == "" do
+      empty
+    else
+      pattern = "%#{term}%"
 
-    tools =
-      Repo.all(
-        from t in Tool,
-          where:
-            t.is_active and
-              (ilike(t.name, ^like) or ilike(t.url, ^like) or ilike(t.category, ^like))
-      )
-
-    bookmarks =
-      Repo.all(
-        from b in Bookmark,
-          where: ilike(b.title, ^like) or ilike(b.url, ^like) or ilike(b.category, ^like)
-      )
-
-    tool_ids = Enum.map(tools, & &1.id)
-    bookmark_ids = Enum.map(bookmarks, & &1.id)
-
-    notes =
-      Repo.all(from n in Note, where: ilike(n.title, ^like))
-      |> Kernel.++(
-        # Encrypted body araması: session'da decrypt edip eşleşenleri bul
-        if String.length(String.trim(term)) >= 2 do
-          Repo.all(Note)
-          |> Enum.filter(fn n ->
-            body = n.body && EAnyPanel.Vault.decrypt(n.body)
-            body && String.downcase(body) =~ String.downcase(String.trim(term))
-          end)
-        else
-          []
-        end
-      )
-      |> Enum.uniq_by(& &1.id)
-
-    secrets = Repo.all(from s in Secret, where: ilike(s.title, ^like))
-
-    %{
-      tools: tools,
-      bookmarks: bookmarks,
-      notes: notes,
-      secrets: secrets,
-      tool_ids: tool_ids,
-      bookmark_ids: bookmark_ids
-    }
+      Enum.reduce(tabs, empty, fn
+        :tools, results ->
+          Map.put(results, :tools, Repo.all(from t in Tool,
+            where: t.is_active and (ilike(t.name, ^pattern) or ilike(t.url, ^pattern) or ilike(t.category, ^pattern))))
+        :bookmarks, results ->
+          Map.put(results, :bookmarks, Repo.all(from b in Bookmark,
+            where: ilike(b.title, ^pattern) or ilike(b.url, ^pattern) or ilike(b.category, ^pattern)))
+        :notes, results ->
+          Map.put(results, :notes, EAnyPanel.Notebook.search_titles(pattern))
+        :secrets, results ->
+          Map.put(results, :secrets, Repo.all(from s in Secret, where: ilike(s.title, ^pattern),
+            select: struct(s, [:id, :title])))
+        _, results -> results
+      end)
+    end
   end
 end

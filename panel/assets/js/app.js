@@ -27,20 +27,10 @@ import topbar from "../vendor/topbar"
 
 const csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 
-// Clipboard: copy hook — phx-hook="CopyButton" + data-copy attr
-const CopyButton = {
-  mounted() {
-    this.el.addEventListener("click", (e) => {
-      e.preventDefault()
-      navigator.clipboard?.writeText(this.el.dataset.copy || "").catch(() => {})
-    })
-  },
-}
-
 const liveSocket = new LiveSocket("/live", Socket, {
   longPollFallbackMs: 2500,
   params: {_csrf_token: csrfToken},
-  hooks: {...colocatedHooks, CopyButton},
+  hooks: {...colocatedHooks},
 })
 
 // Show progress bar on live navigation and form submits
@@ -92,3 +82,36 @@ if (process.env.NODE_ENV === "development") {
   })
 }
 
+
+// Credential values arrive only after a server-authorized, audited action.
+window.addEventListener("phx:copy-to-clipboard", async ({detail}) => {
+  const status = document.getElementById("clipboard-status")
+  try {
+    await navigator.clipboard.writeText(detail.text)
+    if (status) status.textContent = "Kopyalandı."
+  } catch {
+    if (status) status.textContent = "Panoya erişilemedi. Alanı seçerek kopyalayabilirsin."
+  }
+})
+
+window.addEventListener("phx:download-markdown", ({detail}) => {
+  const url = URL.createObjectURL(new Blob([detail.body], {type: "text/markdown;charset=utf-8"}))
+  const link = document.createElement("a")
+  link.href = url
+  link.download = detail.filename
+  document.body.appendChild(link)
+  link.click()
+  link.remove()
+  setTimeout(() => URL.revokeObjectURL(url), 1000)
+})
+
+window.addEventListener("keydown", event => {
+  if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
+    const search = document.getElementById("workspace-search-input")
+    if (search && !document.querySelector(".modal-open")) {
+      event.preventDefault()
+      search.focus()
+      search.select()
+    }
+  }
+})

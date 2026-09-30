@@ -3,11 +3,21 @@ services:
     image: nginx:alpine
     container_name: e-any-portal
     restart: unless-stopped
+    entrypoint: ["/bin/sh", "/opt/portal/start.sh"]
+    command: ["nginx", "-g", "daemon off;"]
     volumes:
       - ./index.html:/usr/share/nginx/html/index.html:ro
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./start.sh:/opt/portal/start.sh:ro
+    secrets:
+      - portal_htpasswd
     networks:
       - proxy-network
 
 networks:
   proxy-network:
     external: true
+
+secrets:
+  portal_htpasswd:
+    file: ${PORTAL_HTPASSWD_FILE:?Set PORTAL_HTPASSWD_FILE to an external htpasswd file}

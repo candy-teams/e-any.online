@@ -13,7 +13,7 @@ defmodule EAnyPanel.Accounts do
 
   @roles ~w(admin manager viewer)
 
-  @all_tabs ~w(dashboard activity panel secrets users settings)
+  @all_tabs ~w(dashboard feed bookmarks notes tools secrets landing proxy_hosts access_lists certificates users audit_logs activity settings panel)
 
   def roles, do: @roles
   def all_tabs, do: @all_tabs

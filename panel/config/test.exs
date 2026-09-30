@@ -7,7 +7,7 @@ import Config
 # Run `mix help test` for more information.
 config :e_any_panel, EAnyPanel.Repo,
   username: "postgres",
-  password: System.get_env("DB_PASSWORD", "20911980Kolay!!!"),
+  password: System.get_env("DB_PASSWORD"),
   hostname: System.get_env("DB_HOSTNAME", "127.0.0.1"),
   port: String.to_integer(System.get_env("DB_PORT", "5433")),
   database: "e_any_panel_test#{System.get_env("MIX_TEST_PARTITION")}",

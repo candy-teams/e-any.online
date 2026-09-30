@@ -5,8 +5,8 @@ Repository: [candy-teams/e-any.online](https://github.com/candy-teams/e-any.onli
 e-any.online ekosisteminin kaynak kodu. Dört kaynak bölümü:
 
 ## portal/
-`e-any.online` statik araç dizini; tek kaynak `portal/index.html`. Repo kökündeki Compose dosyası portalın bağımsız Compose modelini içerir.
-Nginx, repo dışında tutulan htpasswd dosyasıyla erişimi denetler. `PORTAL_HTPASSWD_FILE` zorunludur; kaynak HTML değiştirilmez. Kurulum ve testler: [portal/README.md](portal/README.md).
+`e-any.online` statik landing sayfası - tek `index.html`, nginx container'ı ile serve edilir.
+Admin şifre hash'i `.env`'deki `ADMIN_HASH` ile doldurulur (placeholder `__ADMIN_HASH__`).
 Canlı: https://e-any.online
 
 ## panel/

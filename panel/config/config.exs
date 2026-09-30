@@ -7,6 +7,8 @@
 # General application configuration
 import Config
 
+config :phoenix, :filter_parameters, ["password", "username", "body", "notes", "secret", "note", "text"]
+
 config :e_any_panel,
   ecto_repos: [EAnyPanel.Repo],
   generators: [timestamp_type: :utc_datetime]
