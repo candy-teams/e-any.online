@@ -8,7 +8,6 @@
 - `panel.ex`, `panel/`: catalog, bookmarks, credential storage and access logs; note delegates are compatibility APIs.
 - `notebook.ex`, `notebook/`: encrypted Markdown notes.
 - `private_feed.ex`, `private_feed/`: authenticated workspace feed, distinct from public static content.
-- `infisical.ex`, `infisical_access.ex`, `infisical_audit.ex`: external secret API adapter and panel operation auditing.
 - Root-owned here: application supervision, repository, vault and external NPM client.
 
 ## Local Contracts
@@ -19,19 +18,13 @@
 - Tool credential foreign keys become null on credential deletion; deleting a tool does not delete its credential.
 - Workspace tab access is not tenant or per-record isolation. Do not describe it as multi-tenant authorization.
 
-- Infisical fixes scope from runtime configuration; never accept project/environment/folder from UI params. Whitelist metadata; never persist provider values. Audit attempts before requests and outcomes afterwards; no automatic write retries.
-- InfisicalAccess rechecks user permissions; its internal callers must enforce vault re-authentication. Agents authenticate directly to Infisical with separate identities.
-
 ## Work Guidance
 - Use Ecto changesets for validation and migrations for schema changes.
 - Prefer existing dependencies. Do not introduce cross-tool coupling for convenience.
 
 ## Verification
-- `mix test test/e_any_panel/infisical_test.exs`
 - `mix test test/e_any_panel/workspace_test.exs`
 - `mix precommit` from `panel/` before completion when the runtime is available.
 
 ## Child DOX Index
 - No further child contracts; this file owns all files and folders in this domain directory.
-
-- Versioned `*.v1.*.md` files are historical snapshots, not active contracts.

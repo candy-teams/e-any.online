@@ -77,10 +77,9 @@
 - Plan synchronization with both Google Workspace/Drive and Microsoft 365/OneDrive through separable provider integrations. This is not implemented or connected.
 - Daily activity planning includes project/consultant work logs, hours and invoice tracking; rate units and billing rules remain unspecified. Keep private customer/rate values out of source and documentation.
 - Tools include Activepieces and Windmill; register their actual URLs and link credentials from the vault rather than duplicating passwords.
-- Use Infisical for external credentials via the official CLI API proxy; preserve the separate personal Bitwarden account. No bot Bitwarden signup or migration is required for this integration.
-- External values stay in Infisical. The panel stores audit metadata and uses a scoped machine identity; preserve existing local vault records until an explicit, verified migration.
-- Give each agent its own Infisical identity and least-privilege grants. Agent credentials belong in trusted runtimes, not model prompts, chat, logs or source. Native CLI process injection and API writes are described in INFISICAL.md; no e-any agent API exists yet.
-- Keep candy-teams/e-any.online as the canonical product repository; the standalone e-any-panel foundation is already incorporated. Selection details live in REPOSITORY-REVIEW.md.
+- Use official Bitwarden Cloud for the planned external password provider. Preserve the existing personal account exclusively for personal use; create a separate bot account, with no automatic personal-vault import or access.
+- Agents may read/create/update only explicitly authorized bot records through a trusted integration. Separate read and write permissions; never put master passwords, session keys or returned secrets into model prompts, chat, logs or repository files.
+- External credentials remain in Bitwarden; e-any stores references and access metadata. Keep existing encrypted local records intact until an explicit, verified migration. Bitwarden signup, cloud region and live integration are pending; do not imply they are active.
 - The private feed includes writing, news, blogs, video/music links, and saved bookmarks. First identity tag is the content owner; later identities are publishers. Keep topic tags separate.
 - Planned publishing targets only selected sites/accounts. Agent APIs and automated publishing remain future work until implemented and tested.
 
@@ -88,6 +87,6 @@
 
 - [panel/AGENTS.md](panel/AGENTS.md): Phoenix application, authentication, encrypted records, tools, tests, and panel assets.
 - [portal/AGENTS.md](portal/AGENTS.md): static service directory, independent Compose deployment, server-side portal authentication and checks.
-- Root-owned: README.md, ARCHITECTURE.md, INFISICAL.md, REPOSITORY-REVIEW.md, versioned documentation snapshots, .gitignore and the Compose include entry point; feed/ public static feed generator; blog/ inactive legacy copy. The static feed is distinct from the authenticated private feed.
+- Root-owned: README.md, ARCHITECTURE.md, versioned documentation snapshots, .gitignore and the Compose include entry point; feed/ public static feed generator; blog/ inactive legacy copy. The static feed is distinct from the authenticated private feed.
 
 - Versioned `*.v1.*.md` files are historical snapshots, not active DOX contracts. Preserve them when revising canonical documents.

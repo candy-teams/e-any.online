@@ -64,15 +64,16 @@ e-any is a shared workspace and application directory for personal, company, and
 - Markdown synchronization is a later explicit per-folder option with an offline queue and conflict resolution. Existing encrypted notes must not silently become plaintext cloud files; vault secrets never sync as plaintext.
 - Cloud file changes are signals to reconcile content, not row-level change events. Each record needs a declared source of truth when several clients can edit it.
 
-## Infisical integration
+## Approved Bitwarden direction (not connected)
 
-- `EAnyPanel.Infisical` adapts the v4 API through an operator-configured proxy. `InfisicalAccess` rechecks role/tab access and records value-free operation attempts/outcomes; `InfisicalLive` owns password re-authentication and short-lived display.
-- Scope is one configured project/environment/folder. Lists expose names only; values require explicit reads. Manager/admin can create/update; viewers cannot write. Existing local credentials are not migrated.
-- Each agent uses its own Infisical machine identity through the native CLI/API. Panel identity sharing and an unauthenticated e-any credential API are not supported.
-- The proxy caches API responses; it does not hide returned secrets from the caller. Revocation/cache behavior must be verified for the deployment.
-- Live configuration, token renewal and cloud smoke tests remain deployment tasks. See [INFISICAL.md](INFISICAL.md) for the configuration and security contract.
+- Keep the existing personal Bitwarden account separate. A new bot-only account on official Bitwarden Cloud will own or access selected automation credentials. Signup email and cloud region must come from the user; the user enters the master password directly in Bitwarden.
+- e-any acts as an access directory and policy gateway. Persist provider/region/item references, never a second copy of external passwords. Existing local vault records remain unchanged until migration is separately verified; encrypted Notebook storage remains independent.
+- Authenticate each agent at the gateway; derive its identity from authentication, not request-supplied labels. Default deny; grant reads and writes separately for explicit records or collections. A shared bot account alone does not isolate agents from one another.
+- Use a dedicated CLI profile for the bot account. API-key login does not unlock a password vault; unlocking belongs to a trusted runtime outside the model. Never expose an unlocked CLI HTTP service to the public internet or untrusted local processes.
+- Read/create/update operations must enforce scope before access and check organization/collection ownership. Creation fixes the authorized destination; updates must not move records or silently overwrite concurrent changes. Do not automatically retry ambiguous writes.
+- Send a password only to an authorized execution component for the intended target; return operation status to the model. Redact secret values from request/response logs, telemetry, exceptions and audit records. Record actor, operation, item reference, time and outcome only.
+- A vault-record update does not rotate the password at the target website. Website rotation is a separate workflow requiring a successful target-side change and subsequent vault update.
+- Bitwarden Secrets Manager is a separate future option for machine API keys, not interchangeable with Password Manager accounts or collections.
+- No account has been created, no credentials have been requested or transferred, and no agent endpoint or Bitwarden adapter is implemented yet. Connection work awaits signup details and trusted runtime provisioning.
 
-## Repository selection
-
-- Continue in the umbrella repository. Retain the existing standalone panel's NPM management and Phoenix foundation; preserve umbrella authorization, Notebook, private feed and Bauhaus UI improvements.
-- No older duplicate note or feed module is imported. See [REPOSITORY-REVIEW.md](REPOSITORY-REVIEW.md) for inspected commits and selection evidence.
+References: [Password Manager CLI](https://bitwarden.com/help/cli/), [Password Manager APIs](https://bitwarden.com/help/bitwarden-apis/), [Secrets Manager machine accounts](https://bitwarden.com/help/machine-accounts/).

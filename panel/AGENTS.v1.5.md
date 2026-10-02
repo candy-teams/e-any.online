@@ -20,9 +20,6 @@
 - Tool templates require actual user-provided URLs; registering Activepieces/Windmill does not deploy them.
 - Private tool catalogs are imported with `EAnyPanel.Release.import_tools/1` from a file kept outside the repository; it inserts only missing URLs and never overwrites edited tools or vault links. Catalog files hold no credentials. Only the example fixture `test/support/fixtures/tool_catalog_example.exs` lives in the repo.
 
-- Infisical UI is `/admin/infisical`, linked from Kasa. Require secrets permission, password unlock, five-minute expiry and fresh authorization on every event; poll permission changes every five seconds. Revealed values clear after 60 seconds while connected. Viewer is read-only.
-- Infisical operations use the audited domain boundary; no values enter PostgreSQL, list metadata, logs or browser persistence. Keep configuration disabled until project/folder/proxy/token file are supplied. INFISICAL.md owns setup and agent access instructions.
-
 ## Work Guidance
 - Apply the repository Bauhaus contract to public entry, authentication and workspace screens. Use shared theme tokens, functional row layouts, visible keyboard focus and touch targets of at least 44px for primary controls.
 - Use text branding for e-any; do not display Phoenix starter logos, framework links or version labels in product navigation.
@@ -329,7 +326,6 @@ And **never** do this:
 <!-- usage-rules-end -->
 
 ## Verification
-- Infisical adapter/access checks: `mix test test/e_any_panel/infisical_test.exs test/e_any_panel_web/infisical_live_test.exs`.
 - `mix precommit` runs compilation with warnings treated as errors, unused dependency checks, formatting and tests.
 - New domain checks: `mix test test/e_any_panel/workspace_test.exs`.
 - New interaction checks: `mix test test/e_any_panel_web/workspace_live_test.exs`.

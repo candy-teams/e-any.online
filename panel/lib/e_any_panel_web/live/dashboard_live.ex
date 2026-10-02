@@ -1116,6 +1116,7 @@ defmodule EAnyPanelWeb.DashboardLive do
               </div>
             <% :secrets -> %>
               <div class="flex justify-end mb-4">
+                <.link id="open-infisical" navigate={~p"/admin/infisical"} class="btn btn-outline mr-2">Infisical</.link>
                 <button :if={@current_user.role in ["admin", "manager"]} id="add-secret" class="btn btn-primary btn-sm" phx-click="open_secret_modal" disabled={@vault_locked}>+ Yeni Secret</button>
               </div>
               <div id="secret-cards" phx-update="stream" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">

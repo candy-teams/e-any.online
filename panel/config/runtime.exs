@@ -1,5 +1,12 @@
 import Config
 
+config :e_any_panel, EAnyPanel.Infisical,
+  base_url: System.get_env("EANY_INFISICAL_PROXY_URL"),
+  project_id: System.get_env("EANY_INFISICAL_PROJECT_ID"),
+  environment: System.get_env("EANY_INFISICAL_ENVIRONMENT"),
+  secret_path: System.get_env("EANY_INFISICAL_SECRET_PATH"),
+  token_file: System.get_env("EANY_INFISICAL_TOKEN_FILE")
+
 # config/runtime.exs is executed for all environments, including
 # during releases. It is executed after compilation and before the
 # system starts, so it is typically used to load production configuration

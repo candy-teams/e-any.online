@@ -60,6 +60,7 @@ defmodule EAnyPanelWeb.Router do
       on_mount: [{EAnyPanelWeb.UserAuth, :require_authenticated_user}] do
       live "/admin", DashboardLive, :index
       live "/admin/dashboard", DashboardLive, :index
+      live "/admin/infisical", InfisicalLive, :index
     end
   end
 
